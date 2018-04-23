@@ -1,26 +1,34 @@
 #file io
 print('--reading--')
-
 f = open('ex1/Europarl.txt', 'r+')
 inp = f.read()
 f.close()
 
 
 print('--tokenizing--')
+#Criteria of a sentence
+#First letter should Capitalize
+#End with ! or . or ? or \n
 
-sens = inp.split('\n') #splitting input to sentences
+import re
+reg = ur"([A-Z][^\.!?\n]*[\.!?\n])"  #regex
+sens = re.findall(reg, inp)
 
 nwords = [] #all words length
 nsens = [] #all sentences length
 wsens = [] #all sentences text 
-
+c=0
 for i in sens:
+    if i.count("?") > 1 or i.count("!") > 1 or i.count(".") > 1: 
+        c+=1 #find unsplitted sentence
+        
     words = filter(None, i.split(' ')) #splitting sentence to words
     lenn = [len(j) for j in words if j.isalpha()] #check whether it's word or punctuation. if word, count the length
     nwords.extend(lenn) #put word length to list
     nsens.append(len(words)) #put length of sentence to list
     wsens.append(i) #put text of sentence to list
 
+print('unsplitted sentence: '+str(c))
 print('total words: '+str(len(nwords)))
 print('total sentences: '+str(len(nsens)))
 
